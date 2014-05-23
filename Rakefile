@@ -1,7 +1,24 @@
-require "bundler/gem_tasks"
+begin
+  require 'bundler/setup'
+  require 'bundler/gem_tasks'
+rescue LoadError
+  puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
+end
+
 require "rspec/core/rake_task"
 
 RSpec::Core::RakeTask.new('spec')
 
 # Run RSpec code examples as the default rake task
 task :default => :spec
+
+# Don't push the gem to rubygems
+ENV["gem_push"] = "false" # Utilizes feature in bundler 1.3.0
+
+# Let bundler's release task do its job, minus the push to Rubygems,
+# and after it completes, use "gem inabox" to publish the gem to our
+# internal gem server.
+Rake::Task["release"].enhance do
+  spec = Gem::Specification::load(Dir.glob("*.gemspec").first)
+  sh "gem inabox -g http://gembox.int.simulmedia.net pkg/#{spec.name}-#{spec.version}.gem"
+end
