@@ -18,9 +18,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "rspec"
+  spec.add_dependency "rspec"
   spec.add_development_dependency "rake", "~> 0"
-  spec.add_development_dependency "rspec"
 
   # for gem deployment (http://feeds.feedburner.com/johnpwood)
   spec.add_development_dependency "gem-release"
